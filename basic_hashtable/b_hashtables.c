@@ -102,7 +102,21 @@ BasicHashTable *create_hash_table(int capacity)
  ****/
 void hash_table_insert(BasicHashTable *ht, char *key, char *value)
 {
+  Pair *node;
 
+  if (ht == NULL) {
+    return 1;
+  }
+
+  node = malloc(sizeof(Pair));
+  if(node == NULL) {
+    return 1;
+  }
+  node->key = strdup(key);
+  node->value = strdup(value);
+
+  node_handler(ht, node);
+  return 0;
 }
 
 /****
