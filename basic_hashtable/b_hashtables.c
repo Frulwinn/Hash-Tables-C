@@ -71,6 +71,24 @@ unsigned int hash(char *str, int max)
 BasicHashTable *create_hash_table(int capacity)
 {
   BasicHashTable *ht;
+  //for case where capacity is 0 or less return NULL
+  if (capacity < 1) {
+    return NULL;
+  }
+  //mallocing space for hashtable
+  ht = malloc(sizeof(BasicHashTable));
+  if (ht == NULL) {
+    return NULL;
+  }
+
+  //mallocing space for size of storage
+  ht->storage = (Pair**)malloc(capacity * sizeof(Pair));
+  if (ht->storage == NULL) {
+    return NULL;
+  }
+  //fill block of memory with capacity
+  memset(ht->storage, 0, capacity * sizeof(Pair));
+  ht->capacity = capacity;
 
   return ht;
 }
