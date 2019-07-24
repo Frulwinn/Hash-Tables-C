@@ -181,7 +181,30 @@ char *hash_table_retrieve(BasicHashTable *ht, char *key)
  ****/
 void destroy_hash_table(BasicHashTable *ht)
 {
+  Pair *p;
+  int i;
 
+  if (ht == NULL) {
+    return;
+  }
+
+  for (i = 0; i < ht->capacity; ++i {
+    //while hash tabel storage is not NULL traverse
+    if (ht->storage[i] != NULL) {
+      //traverse the list and free the nodes
+      while(ht->array[i] != NULL) {
+        p = ht->storage[i]->next;
+        free(ht->storage[i]->key);
+        free(ht->storage[i]->value);
+        free(ht->storage[i]);
+        //after freeing the key, value, and storage you still have the pair pointer
+        ht->storage[i] = p
+      }
+      free(ht->storage[i]);
+    }
+  }
+  free(ht->storage);
+  free(ht);
 }
 
 
