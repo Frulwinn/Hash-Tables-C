@@ -87,6 +87,7 @@ BasicHashTable *create_hash_table(int capacity)
     return NULL;
   }
   //fill block of memory with capacity
+  //use calloc instead
   memset(ht->storage, 0, capacity * sizeof(Pair));
   ht->capacity = capacity;
 
@@ -102,6 +103,7 @@ BasicHashTable *create_hash_table(int capacity)
  ****/
 void hash_table_insert(BasicHashTable *ht, char *key, char *value)
 {
+  //node pointer points to Pair that has the key and value
   Pair *node;
 
   if (ht == NULL) {
@@ -112,10 +114,15 @@ void hash_table_insert(BasicHashTable *ht, char *key, char *value)
   if(node == NULL) {
     return 1;
   }
+  //copy of key and value is created
   node->key = strdup(key);
   node->value = strdup(value);
 
+  //need to insert key and value
+  //not finished need to complete
   node_handler(ht, node);
+
+
   return 0;
 }
 
@@ -136,8 +143,36 @@ void hash_table_remove(BasicHashTable *ht, char *key)
  ****/
 char *hash_table_retrieve(BasicHashTable *ht, char *key)
 {
-  return NULL;
-}
+  char *key_cp;
+  int i;
+  Pair *p;
+
+  if (ht == NULL) {
+    return NULL;
+  }
+  //creates copy for key
+  key_cp = strdup(key);
+  //hash key and hash table capacity
+  i = hash(key, ht->capacity);
+  //puts pair into hash table storage
+  p = ht->storage[i];
+
+  //while pair is not empty  compary pair key and key copy 
+  while (p != NULL) {
+    if(strcmp(p->key, key_cp) == 0) {
+      break;
+    }
+    //go to next pair
+    p = p->next;
+  }
+  //free the copy
+  free(key_cp);
+
+  if(p == NULL) {
+    return NULL;
+  }
+
+  return p->value;
 
 /****
   Fill this in.
