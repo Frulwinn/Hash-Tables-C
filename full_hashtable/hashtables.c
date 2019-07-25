@@ -73,7 +73,14 @@ unsigned int hash(char *str, int max)
  */
 HashTable *create_hash_table(int capacity)
 {
-  HashTable *ht;
+  //allocate memory for the hash table 
+  HashTable *ht  = malloc(sizeof(HashTable));
+
+  //set initial values for capacity
+  ht->capacity = capacity;
+
+  //allocate memory for the storage to hold the capacity
+  ht->storage = calloc(capacity, sizeof(LinkedPair *));
 
   return ht;
 }
@@ -89,6 +96,19 @@ HashTable *create_hash_table(int capacity)
  */
 void hash_table_insert(HashTable *ht, char *key, char *value)
 {
+  //Hash the key to get the index
+  unsigned int hash_index = hash(key, ht->capacity);
+
+  //create a linked pair with the key/value
+  LinkedPair *linked_pair = create_pair(key, value);
+
+  //create a variable that references the hashed index
+  if (currently_stored_pair != NULL) {
+    //set the currently stored pair's next to the linked pair to be inserted
+    currently_stored_pair->next = linked_pair;
+  }
+  //otherwise, the slot was empty, and the pair should be inserted into the hashed index
+  ht->storage[hash_index] = linked_pair;
 
 }
 
@@ -102,6 +122,15 @@ void hash_table_insert(HashTable *ht, char *key, char *value)
  */
 void hash_table_remove(HashTable *ht, char *key)
 {
+  //hash the key to get the index
+  int hash_index = hash(key, ht->capacity);
+
+  //if there is an existing entry and they match
+  if (ht->storage[hash_index] != NULL && strcmp(key,ht->storage[hash_index])) {
+    //if the entry has a next, change that next entry to be the head
+
+  }
+  //if they don't match, move down the linked list, checking the nodes
 
 }
 
@@ -115,6 +144,32 @@ void hash_table_remove(HashTable *ht, char *key)
  */
 char *hash_table_retrieve(HashTable *ht, char *key)
 {
+  //hash the key to get the index
+  int hash_index = hash(key, ht->capacity);
+
+  //check if there is a valid entry in the slot
+  if (ht->storage[hash_index] != NULL) {
+
+    //set the current pair to a variable
+    LinkedPair *current_pairs_pointer = ht->storage[hash_index];
+
+    //while more linked pairs exists
+    while (current_pairs_pointer->next != NULL) {
+      //if they match, return the value
+
+      if (strcmp(current_pairs_pointer->key, key) == 0) {
+        return current_pairs_pointer->value;
+      }
+      //set the current pair to the next pair
+      current_pairs_pointer = current_pairs_pointer->next;
+    }
+    //when no more linked pairs exist and if they match return the value
+    if (strcmp(current_pairs_pointer->key, key) == 0) {
+      return curren_pairs_pointer->value;
+    }
+  }
+  //otherwise, print error
+  fprintf(stderr, "Unable to retrieve and entry with key: %s\n", key);
   return NULL;
 }
 
